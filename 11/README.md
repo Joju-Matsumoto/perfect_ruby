@@ -1,0 +1,27 @@
+# 標準添付ライブラリ
+- 非同期プログラミング
+    - fiber
+- ファイル・ディレクトリ操作
+    - pathname
+    - fileutils
+    - tmpdir
+    - tempfile
+- フォーマットデータ
+    - yaml
+    - json
+    - csv
+- 文字列操作
+    - stringio
+- 集合
+    - set
+- 日付と時刻
+    - time
+    - date
+- HTTPクライアント
+    - net/http
+- テンプレートライブラリ
+    - erb
+- ベンチマーク
+    - benchmark
+- ログファイル
+    - logger
