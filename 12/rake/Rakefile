@@ -1,0 +1,118 @@
+# frozen_string_literal: true
+
+require 'rake/clean'
+require 'yaml'
+
+CLEAN.include 'meals/*'
+CLOBBER.include 'reports/*'
+
+TXT_DIR = "#{Dir.pwd}/meals/".freeze
+OUTPUT_DIR = "#{Dir.pwd}/reports/".freeze
+OUTPUT_FILE = OUTPUT_DIR + "report_#{Time.now.strftime('%y%m%d')}.txt"
+
+FILE_EXT = '.txt'
+MEALS = [
+  { name: 'breakfast', label: '朝食' },
+  { name: 'lunch', label: '昼食' },
+  { name: 'dinner', label: '夕食' }
+].freeze
+TXT_FILES = MEALS.map { |m| TXT_DIR + m[:name] + FILE_EXT }
+
+task default: :daily_report
+
+desc '一日の食事記録を作成する'
+task daily_report: %i[check report] do
+  puts '一日の食事記録を作成しました'
+end
+
+desc '食事記録ファイルの確認'
+task check: TXT_FILES do
+end
+
+TXT_FILES.each do |file_name|
+  # ファイルタスク：
+  #   ファイルが存在しない場合に実行される
+  #   ファイルの生成に時間がかかる場合は有用
+  file file_name do
+    puts "#{file_name}がありません"
+    puts "#{file_name}を作成します"
+    sh "touch #{file_name}"
+  end
+end
+
+desc '食事レポートの作成'
+task :report do
+  date_str = Time.now.strftime('%Y/%m/%d')
+  output_str = "#{date_str}の食事記録\n\n"
+
+  MEALS.each do |meal|
+    file_name = meal[:name] + FILE_EXT
+    full_path = TXT_DIR + file_name
+
+    description = <<~DESC
+      #{meal[:label]}
+      #{File.read(full_path, encoding: Encoding::UTF_8)}
+    DESC
+
+    output_str += description
+  end
+
+  output_file = OUTPUT_DIR + "report_#{Time.now.strftime('%Y%m%d')}.txt"
+  File.open(output_file, 'w') do |f|
+    f.write output_str
+  end
+end
+
+BACKUP_DIR = "#{Dir.pwd}/backups".freeze
+
+# ディレクトリタスクはブロックを引数に取れないので、タスク自体はtaskで記述する
+directory BACKUP_DIR
+
+desc 'レポートをバックアップする'
+task backups: BACKUP_DIR do
+  sh 'cp reports/* backups/'
+end
+
+desc '今までの食事の名前とカロリー履歴ファイルを作成'
+file 'menu_history.yml' => 'daily.yml' do |t|
+  sh "cat #{t.prerequisites.join(' ')} >> #{t.name}"
+end
+
+rule '.yml' => '.log' do |t|
+  data = {}
+  File.open(t.source).each do |line|
+    data.merge!(Hash[*line.chomp!.split(/,/)])
+  end
+
+  File.open(t.name, 'w') do |f|
+    f.write data.to_yaml
+  end
+end
+
+namespace :child do
+  desc 'sub1'
+  task :sub1 do
+    p 'sub1 is sleeping'
+    sleep 1
+    p 'sub1'
+  end
+
+  desc 'sub2'
+  task :sub2 do
+    p 'sub2 is sleeping'
+    sleep 1
+    p 'sub2'
+  end
+
+  desc 'sub3'
+  task :sub3 do
+    p 'sub3 is sleeping'
+    sleep 1
+    p 'sub3'
+  end
+end
+
+desc 'multi task'
+multitask multi_test: %i[child:sub1 child:sub2 child:sub3] do
+  p 'run'
+end

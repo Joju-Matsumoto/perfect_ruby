@@ -1,2 +1,5 @@
 AllCops:
   TargetRubyVersion: 3.0
+FileName:
+  Exclude:
+    - '**/Rakefile'
