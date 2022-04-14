@@ -1,0 +1,15 @@
+# 目次
+- Numeric
+- String
+- Regexp
+- Comparable
+- Enumerable
+- Time
+- IO/File
+- Dir
+- Thread
+- Fiber
+- Process
+- Struct
+- Marshal
+- ObjectSpace
