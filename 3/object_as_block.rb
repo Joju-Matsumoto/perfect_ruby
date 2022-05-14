@@ -25,7 +25,7 @@ module Puts
       proc do |s|
         @dict.each_pair do |word, color|
           color = color.join(';') if color.is_a?(Array)
-          s = s.gsub(/(#{word})/i) { "\033[#{color}m#{Regexp.last_match(1)}\033[0m" }
+          s = s.to_s.gsub(/(#{word})/i) { "\033[#{color}m#{Regexp.last_match(1)}\033[0m" }
         end
         s
       end
@@ -50,7 +50,18 @@ Puts.add true: Puts::Color::GREEN, false: Puts::Color::YELLOW
 Puts.add error: [Puts::Color::RED, Puts::Color::BOLD]
 Puts.add none: [Puts::Color::BLUE]
 
+class Human
+  def initialize(name)
+    @name = name
+  end
+
+  def to_s
+    "<Human name:#{@name}>"
+  end
+end
+
 puts 'this is true, really true!!', 'this is false', 'this is none'
 puts 'hello True world!'
 puts 'Error: something wrong!'
 puts 'error: none is false. this is true.'
+puts Human.new('Kertruein'), Human.new('Atherrory')
