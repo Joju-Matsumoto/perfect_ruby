@@ -33,6 +33,7 @@ module Puts
   end
 
   @@colorizer = Colorizer.new
+  @@warn = Colorizer.new '.*' => Color::YELLOW
 
   def self.add(**dict)
     @@colorizer.add(**dict)
@@ -40,7 +41,11 @@ module Puts
 
   refine Kernel do
     def puts(*args)
-      super(args.map(&@@colorizer))
+      super(*args.map(&@@colorizer))
+    end
+
+    def warn(*args)
+      super(*args.map(&@@warn))
     end
   end
 end
@@ -65,3 +70,5 @@ puts 'hello True world!'
 puts 'Error: something wrong!'
 puts 'error: none is false. this is true.'
 puts Human.new('Kertruein'), Human.new('Atherrory')
+
+warn "this is deprecated method please use 'wonderful_method'"
