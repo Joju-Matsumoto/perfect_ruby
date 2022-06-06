@@ -1,0 +1,7 @@
+require 'stringio'
+
+stringio = StringIO.new('Alice')
+stringio.seek
+stringio.write 'Bob'
+stringio.rewind
+p stringio.read
