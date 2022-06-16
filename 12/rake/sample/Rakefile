@@ -1,0 +1,16 @@
+desc 'here is first task'
+task :task1 do
+  puts 'this is task1'
+end
+
+desc 'here is second task'
+task :task2 do
+  puts 'this is task2'
+end
+
+desc 'here is multi task1'
+multitask multitask1: %i[task1 task2] do
+  puts 'run multi task'
+end
+
+# 
