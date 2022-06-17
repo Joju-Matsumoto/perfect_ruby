@@ -9,4 +9,4 @@ class RackApplication
   end
 end
 
-Rack::Handler::WEBrick.run RackApplication.new
+run RackApplication.new
