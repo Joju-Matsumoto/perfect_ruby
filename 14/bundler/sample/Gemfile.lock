@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    tapp (1.5.1)
+      thor
+    thor (1.2.1)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  tapp
+
+BUNDLED WITH
+   2.3.7
